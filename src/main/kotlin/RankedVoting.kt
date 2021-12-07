@@ -5,6 +5,7 @@ class RankedVoting {
     private var candidateCount = 0
     private var voteTotals = mutableMapOf<Int, Int>()
     private var voterCount = 0
+    private var tie = true
 
     fun runElection() {
         vote()
@@ -23,8 +24,8 @@ class RankedVoting {
             println("Rank your choices and enter them separated by spaces. e.g. \"2 1 3 4\"")
             input = scan.nextLine()
             var currentVote = currentBallot.ballotHead
-            println("input: $input")
             if (input.lowercase() == "stop") break
+            println("input: $input")
             for (i in input.split(" ").map { it.toInt() }) {
                 currentVote.candidateNumber = i
                 currentVote.nextVote = VoteNode()
@@ -50,10 +51,17 @@ class RankedVoting {
 
         while (!voteTotals.values.any { it > voterCount / 2 }) {
 
-            println("vote totals:")
-            voteTotals.forEach{println("${it.key} ${it.value}")}
-
             minVotes = voteTotals.values.minOrNull() ?: 0
+
+            tie = true
+            for (i in voteTotals) {
+                if (i.value != minVotes) {
+                    tie = false
+                    break
+                }
+            }
+            if (tie) break
+
             for (i in voteTotals) {
                 if (i.value == minVotes) {
                     minVotesCandidate = i.key
@@ -61,7 +69,9 @@ class RankedVoting {
                     while (currentBallot.nextBallot != null) { // Reassign votes of eliminated candidate
                         if (currentBallot.ballotHead.candidateNumber == minVotesCandidate) {
                             if (currentBallot.ballotHead.nextVote != null) {
-                                currentBallot.ballotHead = currentBallot.ballotHead.nextVote!!
+                                do {
+                                    currentBallot.ballotHead = currentBallot.ballotHead.nextVote!!
+                                } while (currentBallot.ballotHead.nextVote != null && (voteTotals[currentBallot.ballotHead.candidateNumber] == null || voteTotals[currentBallot.ballotHead.candidateNumber]!! <= minVotes))
                             }
                         }
                         currentBallot = currentBallot.nextBallot!!
@@ -81,31 +91,19 @@ class RankedVoting {
 
 
     private fun displayResults() {
-        println("Election results:")
-        for (i in voteTotals.toList().sortedBy { it.second }) {
-            println("candidate: ${i.first}, votes: ${i.second}")
-        }
-    }
-
-    fun printVotes() {
-        var currentBallot = head
-        while (currentBallot.nextBallot != null) {
-            println("ballot: ")
-            var currentVote = currentBallot.ballotHead
-            while (currentVote.nextVote != null) {
-                println("${currentVote.candidateNumber} ")
-                currentVote = currentVote.nextVote!!
+        if (tie) println("There was a tie.")
+        println("Winning candidates(s):")
+        val maxVotes = voteTotals.values.maxOrNull()
+        for (i in voteTotals) {
+            if (i.value == maxVotes) {
+                println(i.key)
+                if (!tie) break
             }
-            currentBallot = currentBallot.nextBallot!!
         }
-
-        println("vote totals:")
-        voteTotals.forEach{println("${it.key} ${it.value}")}
     }
+
 }
 
 fun main() {
-    val election = RankedVoting()
-    election.runElection()
-    election.printVotes()
+        RankedVoting().runElection()
 }
