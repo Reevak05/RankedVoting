@@ -1,4 +1,15 @@
 import java.util.*
+import javax.swing.*
+
+class VoteNode {
+    var nextVote : VoteNode? = null
+    var candidateNumber : Int = 0
+}
+
+class BallotNode {
+    var nextBallot: BallotNode? = null
+    var ballotHead = VoteNode()
+}
 
 class RankedVoting {
     private val head = BallotNode()
