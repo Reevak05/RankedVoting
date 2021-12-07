@@ -1,0 +1,7 @@
+Sources:
+
+https://ballotpedia.org/Ranked-choice_voting_(RCV)
+Used to find information about the ranked voting process.
+
+https://en.wikipedia.org/wiki/Instant-runoff_voting#Election_procedure
+Used to find more information about the voting procedure.
