@@ -5,3 +5,6 @@ Used to find information about the ranked voting process.
 
 https://en.wikipedia.org/wiki/Instant-runoff_voting#Election_procedure
 Used to find more information about the voting procedure.
+
+https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html
+Used to find information about Swing.
