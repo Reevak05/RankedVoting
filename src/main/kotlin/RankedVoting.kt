@@ -1,3 +1,6 @@
+import java.awt.FlowLayout
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
 import java.util.*
 import javax.swing.*
 
@@ -11,12 +14,73 @@ class BallotNode {
     var ballotHead = VoteNode()
 }
 
-class RankedVoting {
+class JThingWithCandidateThatCanBeMovedUpAndDownOnTheBallot(_name : String) {
+    val name : JTextField = JTextField(_name)
+    val upButton : JButton = JButton("up")
+    val downButton : JButton = JButton("down")
+}
+
+class RankedVoting : ActionListener {
+    // Voting stuff
     private val head = BallotNode()
     private var candidateCount = 0
     private var voteTotals = mutableMapOf<Int, Int>()
     private var voterCount = 0
     private var tie = true
+
+    // Swing stuff
+    val frame = JFrame("Ranked Voting")
+    val candidateCountEntryLabel = JLabel("Please enter the number of candidates:")
+    val candidateCountEntryField = JTextField("")
+    val candidateCountSubmissionButton = JButton("Proceed to Voting")
+    val nextVoterButton = JButton("Next Voter")
+    val finishVotingButton = JButton("End Voting")
+    val candidateRankLabel = JLabel("Please rank your choices below:")
+    val candidateList = JPanel()
+
+    init {
+        frame.layout = FlowLayout()
+        frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+
+        setUpWindow(1)
+
+        frame.isVisible = true
+    }
+
+    /**
+     * Invoked when an action occurs.
+     * @param e the event to be processed
+     */
+    override fun actionPerformed(e: ActionEvent?) {
+        when (e?.actionCommand) {
+            "Proceed to Voting" -> setUpWindow(2)
+            "NextVoter" -> TODO("make")
+            "End Voting" -> TODO("make")
+        }
+    }
+
+    fun setUpWindow(num : Int) {
+        when (num) {
+            1 -> {
+                // Add contents of first screen
+                frame.add(candidateCountEntryLabel)
+                frame.add(candidateCountEntryField)
+                candidateCountSubmissionButton.addActionListener(this)
+                frame.add(candidateCountSubmissionButton)
+            }
+            2 -> {
+                TODO("make")
+
+            }
+            3 -> {
+                TODO("make")
+            }
+        }
+    }
+
+    fun removeWindowItems() {
+        TODO("make")
+    }
 
     fun runElection() {
         vote()
@@ -116,5 +180,5 @@ class RankedVoting {
 }
 
 fun main() {
-        RankedVoting().runElection()
+        RankedVoting()
 }
