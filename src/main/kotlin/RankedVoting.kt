@@ -14,7 +14,7 @@ class BallotNode {
     var ballotHead = VoteNode()
 }
 
-class JThingWithCandidateThatCanBeMovedUpAndDownOnTheBallot(_name: String) : JPanel() {
+class JBallotCandidate(_name: String) : JPanel() {
     val name = JLabel(_name)
     val upButton = JButton("up")
     val downButton = JButton("down")
@@ -118,7 +118,7 @@ class RankedVoting : ActionListener {
                 frame.add(candidateRankLabel)
                 candidateListPanel.layout = BoxLayout(candidateListPanel, BoxLayout.Y_AXIS)
                 for (i in 1..candidateCount) {
-                    val currentCandidateSelector = JThingWithCandidateThatCanBeMovedUpAndDownOnTheBallot(i.toString())
+                    val currentCandidateSelector = JBallotCandidate(i.toString())
                     currentCandidateSelector.upButton.addActionListener(this)
                     currentCandidateSelector.downButton.addActionListener(this)
                     candidateListPanel.add(currentCandidateSelector)
@@ -158,7 +158,7 @@ class RankedVoting : ActionListener {
     private fun recordVote() {
         var currentVote = currentBallot.ballotHead
         for (component in candidateListPanel.components) {
-            if (component is JThingWithCandidateThatCanBeMovedUpAndDownOnTheBallot) {
+            if (component is JBallotCandidate) {
                 currentVote.candidateNumber = component.name.text.toInt()
                 currentVote.nextVote = VoteNode()
                 currentVote = currentVote.nextVote!!
