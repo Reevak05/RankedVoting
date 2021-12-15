@@ -154,7 +154,6 @@ class RankedVoting : ActionListener {
                         if (!tie) break
                     }
                 }
-                println(winners.joinToString(","))
                 if (winners.size > 1) resultsTitleLabel.text = "Winners:" // If there is a tie, adjust the heading accordingly
                 resultsLabel.text = winners.joinToString(", ")
                 frame.add(resultsLabel)
