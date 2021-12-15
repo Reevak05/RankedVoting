@@ -8,3 +8,6 @@ Used to find more information about the voting procedure.
 
 https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html
 Used to find information about Swing.
+
+https://stackoverflow.com/questions/9347076/how-to-remove-all-components-from-a-jframe-in-java/9347314
+Used to figure out how to remove components from a JPanel.
