@@ -2,7 +2,6 @@ import java.awt.Component
 import java.awt.FlowLayout
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
-import java.util.*
 import javax.swing.*
 
 class VoteNode {
@@ -19,7 +18,7 @@ class JThingWithCandidateThatCanBeMovedUpAndDownOnTheBallot(_name: String) : JPa
     val name = JLabel(_name)
     val upButton = JButton("up")
     val downButton = JButton("down")
-    val panel = JPanel()
+    private val panel = JPanel()
 
     init {
         panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
@@ -38,19 +37,19 @@ class RankedVoting : ActionListener {
     private var voterCount = 0
     private var tie = false
 
-    var currentBallot = head
+    private var currentBallot = head
 
     // Swing stuff
-    val frame = JFrame("Ranked Voting")
-    val candidateCountEntryLabel = JLabel("Please enter the number of candidates:")
-    val candidateCountEntryField = JTextField(4)
-    val candidateCountSubmissionButton = JButton("Proceed to Voting")
-    val candidateRankLabel = JLabel("Please rank your choices below:")
-    val candidateListPanel = JPanel()
-    val nextVoterButton = JButton("Submit Vote")
-    val finishVotingButton = JButton("End Voting")
-    val resultsTitleLabel = JLabel("Winner:")
-    val resultsLabel = JLabel()
+    private val frame = JFrame("Ranked Voting")
+    private val candidateCountEntryLabel = JLabel("Please enter the number of candidates:")
+    private val candidateCountEntryField = JTextField(4)
+    private val candidateCountSubmissionButton = JButton("Proceed to Voting")
+    private val candidateRankLabel = JLabel("Please rank your choices below:")
+    private val candidateListPanel = JPanel()
+    private val nextVoterButton = JButton("Submit Vote")
+    private val finishVotingButton = JButton("End Voting")
+    private val resultsTitleLabel = JLabel("Winner:")
+    private val resultsLabel = JLabel()
 
     init {
         frame.layout = FlowLayout()
@@ -101,7 +100,7 @@ class RankedVoting : ActionListener {
         }
     }
 
-    fun setUpWindow(num: Int) {
+    private fun setUpWindow(num: Int) {
         when (num) {
             1 -> {
                 // Add contents of first screen
@@ -151,37 +150,12 @@ class RankedVoting : ActionListener {
         frame.contentPane.revalidate()
     }
 
-    fun removeWindowItems() {
+    private fun removeWindowItems() {
         frame.contentPane.removeAll()
         frame.repaint()
     }
 
-    private fun vote() {
-        val scan = Scanner(System.`in`)
-        println("Enter the number of candidates: ")
-        candidateCount = scan.nextLine().toInt()
-        println("Voting begins now. When finished, type \"stop\".")
-        var input = "0"
-        var currentBallot: BallotNode = head
-        while (input.lowercase() != "stop") {
-            println("Rank your choices and enter them separated by spaces. e.g. \"2 1 3 4\"")
-            input = scan.nextLine()
-            var currentVote = currentBallot.ballotHead
-            if (input.lowercase() == "stop") break
-            println("input: $input")
-            for (i in input.split(" ").map { it.toInt() }) {
-                currentVote.candidateNumber = i
-                currentVote.nextVote = VoteNode()
-                currentVote = currentVote.nextVote!!
-            }
-            currentBallot.nextBallot = BallotNode()
-            currentBallot = currentBallot.nextBallot!!
-            voterCount++
-        }
-        scan.close()
-    }
-
-    fun recordVote() {
+    private fun recordVote() {
         var currentVote = currentBallot.ballotHead
         for (component in candidateListPanel.components) {
             if (component is JThingWithCandidateThatCanBeMovedUpAndDownOnTheBallot) {
@@ -244,19 +218,6 @@ class RankedVoting : ActionListener {
                 voteTotals[currentBallot.ballotHead.candidateNumber] =
                     (voteTotals[currentBallot.ballotHead.candidateNumber] ?: 0) + 1
                 currentBallot = currentBallot.nextBallot!!
-            }
-        }
-    }
-
-
-    private fun displayResults() {
-        if (tie) println("There was a tie.")
-        println("Winning candidates(s):")
-        val maxVotes = voteTotals.values.maxOrNull()
-        for (i in voteTotals) {
-            if (i.value == maxVotes) {
-                println(i.key)
-                if (!tie) break
             }
         }
     }
